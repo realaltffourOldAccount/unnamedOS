@@ -1,5 +1,6 @@
 *.iso
 *.o
 *.d
+*.swp
 
 build/
