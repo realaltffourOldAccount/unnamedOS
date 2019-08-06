@@ -1,2 +1,10 @@
+#include <stdio.h>
 
-void kernel_main(void) {while(1);}
+#include <kernel/tty.h>
+
+// TODO: Add Unit Testing
+void kernel_main(void) {
+    terminal_initialize();
+    printf("In kernel!\n");
+    printf("Newline test!\n");
+}

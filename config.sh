@@ -1,5 +1,5 @@
-SYSTEM_HEADER_PROJECTS="kernel"
-PROJECTS="kernel"
+SYSTEM_HEADER_PROJECTS="bootloader lib/libc kernel"
+PROJECTS="bootloader lib/libc kernel"
 
 export MAKE=${MAKE:-make}
 export HOST=${HOST:-$(./default-host.sh)}
@@ -12,6 +12,7 @@ export ASM=nasm
 export PREFIX=/usr
 export EXEC_PREFIX=$PREFIX
 export BOOTDIR=/boot
+export BOOTLOADERDIR=/
 export LIBDIR=$EXEC_PREFIX/lib
 export INCLUDEDIR=$PREFIX/include
 
