@@ -1,0 +1,13 @@
+/home/akham/Projects/unnamedOS/lib/libc/stdio/putchar.c:12:    // TODO: Implement stdio and the write system call.
+/home/akham/Projects/unnamedOS/lib/libc/stdio/printf.c:16:// TODO: Complete printf implementation.
+/home/akham/Projects/unnamedOS/lib/libc/stdio/printf.c:33:               // TODO: Set errno to EOVERFLOW.
+/home/akham/Projects/unnamedOS/lib/libc/stdio/printf.c:49:               // TODO: Set errno to EOVERFLOW.
+/home/akham/Projects/unnamedOS/lib/libc/stdio/printf.c:62:               // TODO: Set errno to EOVERFLOW.
+/home/akham/Projects/unnamedOS/lib/libc/stdio/printf.c:73:                // TODO: Set errno to EOVERFLOW.
+/home/akham/Projects/unnamedOS/lib/libc/stdlib/abort.c:7:    // TODO: Add proper kernel panic.
+/home/akham/Projects/unnamedOS/lib/libc/stdlib/abort.c:10:    // TODO: Abnormally terminate the process as if by SIGABRT.
+/home/akham/Projects/unnamedOS/lib/libc/string/memcmp.c:3:// TODO: Refactor variables.
+/home/akham/Projects/unnamedOS/isogen/src/generator.cpp:78:    //p TODO: Implement this.
+/home/akham/Projects/unnamedOS/kernel/kernel/ssp.c:4:// TODO: Add Panic Support.
+/home/akham/Projects/unnamedOS/kernel/kernel/ssp.c:18:    // TODO: Add Panic Support.
+/home/akham/Projects/unnamedOS/kernel/kernel/kernel.c:5:// TODO: Add Unit Testing
