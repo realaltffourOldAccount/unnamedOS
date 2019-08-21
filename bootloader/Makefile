@@ -23,21 +23,26 @@ BOOT1_SRC=\
 $(BOOT1_ARCH_SRC)\
 
 .PHONY: all clean install install-headers install-bootloader
-.SUFFIXES: .bin .S
+.SUFFIXES: .o .bin .S .c
 
-all: boot.bin 
+all: boot0.bin boot1.bin boot.bin 
 
-boot.bin: 
-	nasm $(ASMFLAGS) $(BOOT0_SRC) -o $@
-	nasm $(ASMFLAGS) $(BOOT1_SRC) -o $@
+boot.bin: boot0.bin boot1.bin
 	cat boot0.bin boot1.bin > boot.bin
 	rm -f boot0.bin
 	rm -f boot1.bin
 
+boot0.bin: $(BOOT0_OBJS)
+
+boot1.bin: $(BOOT1_OBJS)
+
+.S.o:
+
+.c.o:
+
 clean:
-	rm -f boot0.bin
-	rm -f boot1.bin
-	rm -f $(OBJS) *.0 */*.o */*/*.o
+	rm -f boot.bin
+	rm -f $(OBJS) *.o */*.o */*/*.o
 
 install: install-bootloader
 
