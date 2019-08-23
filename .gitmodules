@@ -1,0 +1,3 @@
+[submodule "compilers/i686-elf-gcc"]
+	path = compilers/i686-elf-gcc
+	url = https://gitlab.com/ayhamaboualfadl/i686-elf-gcc.git
