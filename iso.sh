@@ -1,7 +1,7 @@
 #!/bin/sh
-set -e
 
 # Make sure that the OS is build beforehand.
+set -e
 . ./build.sh
 
 # Set-up the directory structure.

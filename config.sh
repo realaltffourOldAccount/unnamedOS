@@ -1,3 +1,6 @@
+# Get the directory of the script.
+DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
+
 # Projects lists
 #SYSTEM_HEADER_PROJECTS="bootloader lib/libc kernel"
 #PROJECTS="bootloader lib/libc kernel"
@@ -9,10 +12,14 @@ PROJECTS="lib/libc kernel"
 export MAKE=${MAKE:-make}
 export HOST=${HOST:-$(./default-host.sh)}
 
+# Get compiler
+export COMPILER=$(./default-compiler.sh)
+export PATH="$DIR/compiler/$COMPILER/bin/bin:$PATH"
+
 # Tools
-export CC=${HOST}-gcc
-export AR=${HOST}-ar
-export AS=${HOST}-as
+export CC=$DIR/compilers/$COMPILER/bin/bin/${HOST}-gcc
+export AR=$DIR/compilers/$COMPILER/bin/bin/${HOST}-ar
+export AS=$DIR/compilers/$COMPILER/bin/bin/${HOST}-as
 export ASM=nasm
 
 # Generic Configuration.

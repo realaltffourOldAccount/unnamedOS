@@ -1,7 +1,15 @@
 #!/bin/sh
 set -e
-. ./headers.sh
+. ./compile.sh
 
-for PROJECT in $PROJECTS; do
-    (cd $PROJECT && DESTDIR="$SYSROOT" $MAKE install)
-done
+# Get the directory of the script.
+DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
+
+# Get the choosen compiler to build with.
+COMPILER=$(./default-compiler.sh)
+
+# Build the compiler.
+$DIR/compilers/$COMPILER/install.sh
+
+# Build unnamedOS.
+$DIR/compile.sh
