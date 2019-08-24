@@ -1,6 +1,4 @@
 #!/bin/sh
-set -e
-. ./compile.sh
 
 # Get the directory of the script.
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
@@ -12,4 +10,5 @@ COMPILER=$(./default-compiler.sh)
 $DIR/compilers/$COMPILER/install.sh
 
 # Build unnamedOS.
-$DIR/compile.sh
+set -e
+. $DIR/compile.sh
