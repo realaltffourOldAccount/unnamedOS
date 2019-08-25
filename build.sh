@@ -7,6 +7,7 @@ DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
 COMPILER=$(./default-compiler.sh)
 
 # Build the compiler.
+set -e
 $DIR/compilers/$COMPILER/install.sh
 
 # Build unnamedOS.

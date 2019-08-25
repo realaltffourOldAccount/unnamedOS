@@ -3,9 +3,9 @@ with import <nixpkgs> {}; {
     name = "unnamedOSenv";
     buildInputs = [
       stdenv
-      gcc
       cmake
       nasm
+      gcc
     ];
   };
 }
