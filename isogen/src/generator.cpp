@@ -3,7 +3,10 @@
 auto generate_iso(ISOinfo& iso)->void {
     // Allocate ISO buffer.
     // Convert from Megabyte to bytes
-    iso._buff = (std::byte*)malloc(iso._buffSize*1024*1024);
+    iso._buff = (byte8*)malloc(iso._buffSize*1024*1024);
+
+	// Allocate boot0 buffer.
+	iso._boot0buff = (byte8*)malloc(512);
 
     // Configure the generator system.
     switch (iso._fs) {

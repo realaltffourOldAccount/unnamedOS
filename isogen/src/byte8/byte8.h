@@ -5,6 +5,9 @@
 #include <string>
 #include <sstream>
 #include <stdlib.h>
+#include <algorithm>
+
+#include <iostream>
 
 using byte8 = std::bitset<8>;
 
@@ -13,7 +16,7 @@ auto byte8_malloc(byte8* dest, size_t size)->byte8;
 auto byte8_free(byte8* dest)->void;
 
 // Set byte8 values.
-auto byte8_set(byte8& byte, const std::string& hex)->void;
+auto byte8_set(byte8& byte, std::string hex)->void;
 auto byte8_set(byte8& byte, const unsigned int value)->void;
 
 // Get byte8 value.

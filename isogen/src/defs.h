@@ -4,7 +4,8 @@
 #include <string>
 #include <map>
 #include <vector>
-#incldue <bitset>
+#include "byte8/byte8.h"
+
 
 // Type Definitions
 #define normArgs std::vector<std::string>

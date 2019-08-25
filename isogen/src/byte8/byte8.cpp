@@ -1,17 +1,17 @@
  #include "byte8.h"
 
 auto byte8_malloc(byte8* dest, size_t size)->byte8 {
-	dest = malloc(size);
+	dest = (byte8*)malloc(size);
 }
 
 auto byte8_free(byte8* dest)->void {
 	free(dest);
 }
 
-auto byte8_set(byte8& byte, cosnt std::string& hex)->void {
+auto byte8_set(byte8& byte, std::string hex)->void {
 	// Check if hex is a hexadecimal value
 	if (hex[0] != '0' || hex[1] != 'x') {
-		cout << "Invalid hexadecimal value passed.\n";
+		std::cout << "Invalid hexadecimal value passed.\n";
 		exit(1);
 	}
 	// Remove 0x from hex string
@@ -46,7 +46,7 @@ auto byte8_getint(const byte8& byte)->unsigned int {
 auto byte8_gethex(const byte8& byte)->std::string {
 	std::string result;
 	std::stringstream ss;
-	ss << hex << byte.to_ulong();
+	ss << std::hex << byte.to_ulong();
 	ss >> result;
 
 	// Add 0x to the result string.
@@ -60,11 +60,11 @@ auto byte8_gethex(const byte8& byte)->std::string {
 
 auto str2byte8(const std::string& bin)->byte8 {
 	if (bin.empty()) {
-		cout << "Binary value can't be empty!\n";
+		std::cout << "Binary value can't be empty!\n";
 		exit(1);
 	}
 	if (bin.size() > 8) {
-		cout << "Binary value length must not be greater than 8!\n";
+		std::cout << "Binary value length must not be greater than 8!\n";
 		exit(1);
 	}
 	return byte8(bin);
@@ -72,7 +72,7 @@ auto str2byte8(const std::string& bin)->byte8 {
 
 auto int2byte8(unsigned int val)->byte8 {
 	if (!is8bitDecimal(val)) {
-		cout << "Integer is not a 8-bit decimal!\n";
+		std::cout << "Integer is not a 8-bit decimal!\n";
 		exit(1);
 	}
 	return byte8(val);

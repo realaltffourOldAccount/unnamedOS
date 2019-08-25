@@ -10,6 +10,8 @@
 #include "helper.h"
 #include "fat16/fat16.h"
 
+#include "byte8/byte8.h"
+
 using namespace std;
 
 auto show_help()->void;
