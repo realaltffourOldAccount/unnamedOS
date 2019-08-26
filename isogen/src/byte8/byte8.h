@@ -34,6 +34,7 @@ auto int2byte8(unsigned int val)->byte8;
 auto hex2byte8(const std::string& val)->byte8;
 
 // Misc functions.
-constexpr auto is8bitDecimal(unsigned int val)->bool;
+auto is8bitDecimal(unsigned int val)->bool;
+auto isxbitDecimal(unsigned int val, int bits)->bool;
 
 #endif

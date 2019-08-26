@@ -66,11 +66,11 @@ struct ISOinfo {
     std::string _dir_loc = "";
     std::string _output_loc = "";
     byte8* _buff = nullptr;
+	size_t _buffSize = 0;
 	byte8* _boot0buff = nullptr;
 	size_t _boot0siz = 512; // defaults to bootsector size.
 	byte8* _boot1buff = nullptr;
 	size_t _boot1siz = 0;
-    size_t _buffSize = 0;
 };
 
 #endif

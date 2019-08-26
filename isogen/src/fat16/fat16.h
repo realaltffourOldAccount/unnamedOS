@@ -18,10 +18,9 @@ struct FAT16_EBPB;
 
 struct FAT16_BootSector {
 	byte8 jmpInst[3] = {0}; // inst: JMP SHORT 3C NOP, to skip BPB, EPBP. off: 0, siz: 3
-	FAT16_BPB* biosParamBlock = nullptr; // off: 3, siz: 32
-	byte8 BPBsplit[1] = {0}; // empty. off: 35, siz: 1
-	FAT16_EBPB* extendedBiosParamBlock = nullptr; // off: 36, siz: 18
-	byte8 bootCode[448] = {0}; // boot code. off: 54, siz: 448
+	FAT16_BPB* biosParamBlock = nullptr; // off: 3, siz: 33
+	FAT16_EBPB* extendedBiosParamBlock = nullptr; // off: 36, siz: 26
+	byte8 bootCode[448] = {0}; // boot code. off: 62, siz: 448
 	byte8 bootSign[2] = {0}; // boot signature. off: 510, siz: 2
 };
 struct FAT16_BPB /* BOIS Parameter Block */ {
@@ -34,9 +33,10 @@ struct FAT16_BPB /* BOIS Parameter Block */ {
 	byte8 totalSectors[2] = {0}; // total sectors in logical vol. off: 19, siz: 2
 	byte8 mediaDescriptor[1] = {0}; // media descriptor type. off: 21, siz: 1
 	byte8 sectorPerFAT[2] = {0}; // number of sectors per FAT. off: 22, siz: 2
-	byte8 numHeads[2] = {0}; // number of heads or sides. off: 24, siz: 2
-	byte8 numHiddenSec[4] = {0}; // number of hidden sectors. off: 26, siz: 4
-	byte8 largeSecCnt[4] = {0}; // Large sector count. off: 30, siz: 4	
+	byte8 sectorPerTrack[2] = {0}; // number of sectors per Track. off: 24, siz: 2
+	byte8 numHeads[2] = {0}; // number of heads or sides. off: 26, siz: 2
+	byte8 numHiddenSec[4] = {0}; // number of hidden sectors. off: 28, siz: 4
+	byte8 largeSecCnt[4] = {0}; // Large sector count. off: 32, siz: 4	
 };
 struct FAT16_EBPB /* Extended BOIS Parameter Block */ {
 	byte8 driveNum[1] = {0}; // drive number passed by the BIOS. off: 36, siz: 1

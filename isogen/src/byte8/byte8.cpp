@@ -99,6 +99,10 @@ auto hex2byte8(const std::string& hex)->byte8 {
 	return result;
 }
 
-constexpr auto is8bitDecimal(unsigned int val)->bool {
+auto is8bitDecimal(unsigned int val)->bool {
 	return (val > 0) && (val <= 255);
+}
+
+auto isxbitDecimal(unsigned int val, int bits)->bool {
+	return (val > 0) && (val <= (2^bits));
 }

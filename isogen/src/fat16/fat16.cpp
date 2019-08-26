@@ -47,24 +47,21 @@ auto fat16_init(ISOinfo& iso)->void {
 		bootSector.jmpInst[i] = iso._boot0buff[i];
 
 	// Check biosParamBlock
-	for (int i = 3; i < 35; i++)
+	for (int i = 3; i < 36; i++)
 		if (iso._boot0buff[i] != byte8()) {
 			std::cout << "Invalid biosParamBlock, expected 0x00.\n";
 			exit(1);
 		}
 	
-	// Load BPBsplit.
-	bootSector.BPBsplit[0] = iso._boot0buff[35];
-
 	// Check extendedBiosParamBlock
-	for (int i = 36; i < 54; i++)
+	for (int i = 36; i < 62; i++)
 		if (iso._boot0buff[i] != byte8()) {
 			std::cout << "Invalid extendedBiosparamblock, expected 0x00.\n";
 			exit(1);
 		}
 	
 	// Load bootCode
-	for (int i = 54, c = 0; i < 448; i++)
+	for (int i = 62, c = 0; i < 510; i++)
 		bootSector.bootCode[c] = iso._boot0buff[i];
 
 	// Load bootSign
@@ -76,7 +73,110 @@ auto fat16_init(ISOinfo& iso)->void {
 }
 
 auto fat16_genBoot(ISOinfo& iso)->void {
-	
+	// Set-up BIOS Parameter Block
+
+	// Set oem id to ISOGEN
+	std::string oem = "FreeDOS ";
+	for (int i = 0; i < 8; i++)
+		bootSector.biosParamBlock->oem_id[i] = oem[i];
+
+	// Set Bytes Per Sector to 512
+	bootSector.biosParamBlock->bytesPerSector[0] = byte8(2);
+	bootSector.biosParamBlock->bytesPerSector[1] = byte8();
+
+	// Set reserved sectors to (boot1siz/512)+2.
+	int reserved = (iso._boot1siz/512)+2;
+	if (is8bitDecimal(reserved)) {
+		bootSector.biosParamBlock->reservedSectors[0] = byte8(reserved);
+	}
+	else {
+		// Check if reserved can fit to two bytes.
+		if (!isxbitDecimal(reserved, 16 /*8x2*/)) {
+			std::cout << "Size of boot1 is larger than: " << (2^16) << "\n";
+			exit(1);
+		}
+		std::bitset<16> tempres(reserved);
+		for (int i = 0; i < 8; i++)
+			bootSector.biosParamBlock->reservedSectors[0][i] = tempres[i];
+		for (int i = 0; i < 8; i++)
+			bootSector.biosParamBlock->reservedSectors[1][i] = tempres[i+8];
+	}
+
+	// Set number of FATs two one.
+	bootSector.biosParamBlock->numFAT[0] = byte8(1);
+
+	// Set number of directory entries to 512 (comp with MSDOS).
+	bootSector.biosParamBlock->numDirEntry[0] = byte8(2);
+	bootSector.biosParamBlock->numDirEntry[1] = byte8(0);
+
+	// Set total sectors in logical volume.
+
+	// Check if ISO size can fit in 2 bytes.
+	if (isxbitDecimal((iso._buffSize/512), 16 /*8x2*/)) {
+		std::bitset<16> tempsiz(iso._buffSize);
+		for (int i = 0; i < 8; i++)
+			bootSector.biosParamBlock->totalSectors[0][i] = tempsiz[i];
+		for (int i = 0; i < 8; i++)
+			bootSector.biosParamBlock->totalSectors[1][i] = tempsiz[i+8];
+	}
+
+	// Set mediaDescriptor type.
+	bootSector.biosParamBlock->mediaDescriptor[0] = byte8("255");
+
+	// Set number of sectors per FAT to 9 // TODO: check number.
+	bootSector.biosParamBlock->sectorPerFAT[0] = byte8(9);
+	bootSector.biosParamBlock->sectorPerFAT[1] = byte8(1);
+
+	// Set number of heads to one.
+	bootSector.biosParamBlock->numHeads[0] = byte8(1);
+	bootSector.biosParamBlock->numHeads[1] = byte8();
+
+	// Set number of hidden sectors.
+	bootSector.biosParamBlock->numHiddenSec[0] = byte8();
+	bootSector.biosParamBlock->numHiddenSec[1] = byte8();
+
+	// Set Large sector count.
+
+	// Check if count is large enough.
+	if (!isxbitDecimal((iso._buffSize/512), 16)) {
+		std::bitset<8*4> tempsiz(iso._buffSize);
+
+		for (int i = 0; i < 8; i++)
+			bootSector.biosParamBlock->largeSecCnt[0][i] = tempsiz[i];
+		for (int i = 0; i < 8; i++)
+			bootSector.biosParamBlock->largeSecCnt[1][i] = tempsiz[i+8];
+		for (int i = 0; i < 8; i++)
+			bootSector.biosParamBlock->largeSecCnt[2][i] = tempsiz[i+(8*2)];
+		for (int i = 0; i < 8; i++)
+			bootSector.biosParamBlock->largeSecCnt[3][i] = tempsiz[i+(8*3)];
+	}
+
+	///////////////////////////////////////////////////////
+
+	// Set-up Extended BIOS Block.
+
+	// Set up drive Number
+	bootSector.extendedBiosParamBlock->driveNum[0] = hex2byte8("0x80");
+
+	// Set up windows NT flags.
+	bootSector.extendedBiosParamBlock->winNTFlags[0] = byte8();
+
+	// Set up signature flag.
+	bootSector.extendedBiosParamBlock->signature[0] = hex2byte8("0x28");
+
+	// Leave volume ID as is.
+
+	// Set up volume label to ISO
+	std::string label = "ISO        ";
+	for (int i = 0; i < label.size(); i++) {
+		bootSector.extendedBiosParamBlock->volLabel[i] = byte8(label[i]);
+	}
+
+	// Set up system fle system name.
+	std::string sysID = "FAT16   ";
+	for (int i = 0; i < sysID.size(); i++) {
+		bootSector.extendedBiosParamBlock->sysIDstr[i] = byte8(sysID[i]);
+	}
 }
 
 auto fat16_write_boot0(ISOinfo& iso)->void {}
