@@ -26,12 +26,13 @@ int main(int argc, const char* args[]) {
         std::cout << "Usage: isogen --help or -h\n";
         exit(1);
     }
+	
     ISOinfo ISO;
     auto p_args = normArgs{parse_args(argc, args)};
     auto paired_args = pairedArgs{pair_args(p_args)};
-    gen_info(ISO, paired_args);
-    check_info(&ISO);
-    generate_iso(ISO);
+	gen_info(ISO, paired_args);
+	check_info(&ISO);
+	generate_iso(ISO);
     cout << "ISO generated successfully.\n";
     
     return 0;

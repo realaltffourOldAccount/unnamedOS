@@ -1,11 +1,26 @@
  #include "byte8.h"
 
-auto byte8_malloc(byte8* dest, size_t size)->byte8 {
-	dest = (byte8*)malloc(size);
+auto byte8_malloc(size_t size)->byte8* {
+	return (byte8*)malloc(size);
 }
 
 auto byte8_free(byte8* dest)->void {
 	free(dest);
+}
+
+auto byte8_arrset(byte8* const dest, size_t size, const char* const src)->void {
+	if (dest == nullptr) {
+		std::cout << "Destination byte8 array is nullptr.\n";
+		exit(1);
+	}
+	if (src == nullptr) {
+		std::cout << "Sourrce byte8 array is nullptr.\n";
+		exit(1);
+	}
+
+	for (int i = 0; i < size; i++) {
+		*(dest+i) = byte8(*(src+i));
+	}
 }
 
 auto byte8_set(byte8& byte, std::string hex)->void {

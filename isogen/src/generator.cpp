@@ -5,9 +5,6 @@ auto generate_iso(ISOinfo& iso)->void {
     // Convert from Megabyte to bytes
     iso._buff = (byte8*)malloc(iso._buffSize*1024*1024);
 
-	// Allocate boot0 buffer.
-	iso._boot0buff = (byte8*)malloc(512);
-
     // Configure the generator system.
     switch (iso._fs) {
     case FileSystems::FS_FAT16:

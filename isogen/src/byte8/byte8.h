@@ -12,8 +12,12 @@
 using byte8 = std::bitset<8>;
 
 // Allocation, and freeing of byte8.
-auto byte8_malloc(byte8* dest, size_t size)->byte8;
+auto byte8_malloc(size_t size)->byte8*;
 auto byte8_free(byte8* dest)->void;
+
+// Set byte8 array values.
+auto byte8_arrset(byte8* const dest, size_t size, const char* const src)->void;
+
 
 // Set byte8 values.
 auto byte8_set(byte8& byte, std::string hex)->void;
