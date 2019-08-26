@@ -4,7 +4,7 @@ auto fat16_init(ISOinfo& iso)->void {
 	// Allocate boot0 buffer.
 	// Boot sector is always 512 bytes.
 	iso._boot0buff = byte8_malloc(512);
-	
+    
 	// Open boot0 and boot1 files.
 	std::fstream boot0_stream(iso._boot0_loc, std::ios::in | std::ios::out | std::ios::binary | std::ios::ate);
 	std::fstream boot1_stream(iso._boot1_loc, std::ios::in | std::ios::out | std::ios::binary | std::ios::ate);
@@ -19,17 +19,17 @@ auto fat16_init(ISOinfo& iso)->void {
 		std::cout << "Could not open boot1 file!\n";
 		exit(1);
 	}
-
+	
 	// Allocate boot1.
 	boot1_stream.seekg(0, std::ios::end);
 	iso._boot1buff = byte8_malloc(boot1_stream.tellg());
 	iso._boot1siz = boot1_stream.tellg();
 	boot1_stream.seekg(0, std::ios::beg);
-	
+
 	// Load boot0 and boot1 into their buffers.
 	char* boot0_tmp = new char[iso._boot0siz];
 	char* boot1_tmp = new char[iso._boot1siz];
-
+ 
     boot0_stream.read(boot0_tmp, iso._boot0siz);
 	boot1_stream.read(boot1_tmp, iso._boot1siz);
 
@@ -67,7 +67,7 @@ auto fat16_init(ISOinfo& iso)->void {
 	// Load bootSign
 	for (int i = 510, c = 0; i < 512; i++)
 		bootSector.bootSign[c] = iso._boot0buff[i];
-
+	
 	fat16_format_iso(iso);
 }
 
@@ -77,14 +77,14 @@ auto fat16_genBoot(ISOinfo& iso)->void {
 	// Set oem id to ISOGEN
 	std::string oem = "FrennnnneDOS ";
 	for (int i = 0; i < 8; i++)
-		bootSector.biosParamBlock->oem_id[i] = oem[i];
-
+		bootSector.biosParamBlock->oem_id[i] = byte8(oem[i]);
+   
 	// Set Bytes Per Sector to 512
 	bootSector.biosParamBlock->bytesPerSector[0] = byte8(2);
 	bootSector.biosParamBlock->bytesPerSector[1] = byte8();
 
 	// Set reserved sectors to (boot1siz/512)+2.
-	int reserved = (iso._boot1siz/512)+2;
+	int reserved = (iso._boot1siz/512)+1;
 	if (is8bitDecimal(reserved)) {
 		bootSector.biosParamBlock->reservedSectors[0] = byte8(reserved);
 	}
@@ -100,7 +100,7 @@ auto fat16_genBoot(ISOinfo& iso)->void {
 		for (int i = 0; i < 8; i++)
 			bootSector.biosParamBlock->reservedSectors[1][i] = tempres[i+8];
 	}
-
+	
 	// Set number of FATs two one.
 	bootSector.biosParamBlock->numFAT[0] = byte8(1);
 
@@ -118,9 +118,14 @@ auto fat16_genBoot(ISOinfo& iso)->void {
 		for (int i = 0; i < 8; i++)
 			bootSector.biosParamBlock->totalSectors[1][i] = tempsiz[i+8];
 	}
+	else {
+		// ISO size doesn't fit here use largeSeccnt
+		bootSector.biosParamBlock->totalSectors[0] = byte8();
+		bootSector.biosParamBlock->totalSectors[1] = byte8();
+	}
 
 	// Set mediaDescriptor type.
-	bootSector.biosParamBlock->mediaDescriptor[0] = byte8("255");
+	bootSector.biosParamBlock->mediaDescriptor[0] = hex2byte8("0x255");
 
 	// Set number of sectors per FAT to 9 // TODO: check number.
 	bootSector.biosParamBlock->sectorPerFAT[0] = byte8(9);
@@ -194,6 +199,11 @@ auto fat16_write_boot0(ISOinfo& iso)->void {
 		*(iso._buff+i) = *(iso._boot1buff+i);
 }
 
-auto fat16_write_boot1(ISOinfo& iso)->void {}
+auto fat16_write_boot1(ISOinfo& iso)->void {
+	// Write boot1 into reserved sectors.
 
-auto fat16_write_isodir(ISOinfo& iso)->void {} 
+	for (int i = 513, c = 0; i < iso._boot1siz+513; i++, c++)
+		*(iso._buff+i) = *(iso._boot1buff+c);
+}
+
+auto fat16_write_isodir(ISOinfo& iso)->void {}

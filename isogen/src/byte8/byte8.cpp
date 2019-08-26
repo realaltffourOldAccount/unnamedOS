@@ -1,7 +1,7 @@
  #include "byte8.h"
 
 auto byte8_malloc(size_t size)->byte8* {
-	return (byte8*)malloc(size);
+	return new byte8[size];
 }
 
 auto byte8_free(byte8* dest)->void {

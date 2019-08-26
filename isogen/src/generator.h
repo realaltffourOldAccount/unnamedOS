@@ -9,7 +9,6 @@
 
 auto generate_iso(ISOinfo& iso)->void;
 auto write_boot0(ISOinfo& iso)->void;
-auto format_iso(ISOinfo& iso)->void;
 auto write_boot1(ISOinfo& iso)->void;
 auto write_isodir(ISOinfo& iso)->void;
 auto writeISO(const ISOinfo& iso)->void;

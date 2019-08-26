@@ -25,26 +25,21 @@ $(BOOT1_ARCH_SRC)\
 .PHONY: all clean install install-headers install-bootloader
 .SUFFIXES: .o .bin .S .c
 
-all: boot0.bin boot1.bin boot.bin 
-
-boot.bin: boot0.bin boot1.bin
-	cat boot0.bin boot1.bin > boot.bin
-	rm -f boot0.bin
-	rm -f boot1.bin
-
 boot0.bin: $(BOOT0_OBJS)
 
 boot1.bin: $(BOOT1_OBJS)
 
 .S.o:
+	$(CC) -MD -c $< -o $@ $(CFLAGS) $(CPPFLAGS)
 
 .c.o:
+	$(CC) -MD -c $< -o $@ -std=gnu11 $(CFLAGS) $(CPPFLAGS)
 
 clean:
-	rm -f boot.bin
+	rm -f boot0.bin boot1.bin
 	rm -f $(OBJS) *.o */*.o */*/*.o
 
 install: install-bootloader
 
-install-bootloader: boot.bin
-	cp boot.bin $(DESTDIR)$(BOOTLOADERDIR)
+install-bootloader: boot0.bin boot1.bin
+

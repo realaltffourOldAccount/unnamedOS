@@ -2,11 +2,11 @@
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
 
 # Projects lists
-#SYSTEM_HEADER_PROJECTS="bootloader lib/libc kernel"
-#PROJECTS="bootloader lib/libc kernel"
+SYSTEM_HEADER_PROJECTS="bootloader lib/libc kernel"
+PROJECTS="bootloader lib/libc kernel"
 
-SYSTEM_HEADER_PROJECTS="lib/libc kernel"
-PROJECTS="lib/libc kernel"
+#SYSTEM_HEADER_PROJECTS="lib/libc kernel"
+#PROJECTS="lib/libc kernel"
 
 # Host configuration
 export MAKE=${MAKE:-make}
