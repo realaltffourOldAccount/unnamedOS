@@ -68,15 +68,14 @@ auto fat16_init(ISOinfo& iso)->void {
 	for (int i = 510, c = 0; i < 512; i++)
 		bootSector.bootSign[c] = iso._boot0buff[i];
 
-	// Generate fat16 bootsector information.
-	fat16_genBoot(iso);
+	fat16_format_iso(iso);
 }
 
 auto fat16_genBoot(ISOinfo& iso)->void {
 	// Set-up BIOS Parameter Block
 
 	// Set oem id to ISOGEN
-	std::string oem = "FreeDOS ";
+	std::string oem = "FrennnnneDOS ";
 	for (int i = 0; i < 8; i++)
 		bootSector.biosParamBlock->oem_id[i] = oem[i];
 
@@ -155,13 +154,13 @@ auto fat16_genBoot(ISOinfo& iso)->void {
 
 	// Set-up Extended BIOS Block.
 
-	// Set up drive Number
+	// Set up drive Number, to 0x80 for setting as hardisk (useless).
 	bootSector.extendedBiosParamBlock->driveNum[0] = hex2byte8("0x80");
 
 	// Set up windows NT flags.
 	bootSector.extendedBiosParamBlock->winNTFlags[0] = byte8();
 
-	// Set up signature flag.
+	// Set up signature flag, to 0x28 for enabling following flags.
 	bootSector.extendedBiosParamBlock->signature[0] = hex2byte8("0x28");
 
 	// Leave volume ID as is.
@@ -179,9 +178,21 @@ auto fat16_genBoot(ISOinfo& iso)->void {
 	}
 }
 
-auto fat16_write_boot0(ISOinfo& iso)->void {}
+auto fat16_format_iso(ISOinfo& iso)->void {
+	// Generate fat16 bootsector information.
+	fat16_genBoot(iso);
+}
 
-auto fat16_format_iso(ISOinfo& iso)->void {}
+auto fat16_write_boot0(ISOinfo& iso)->void {
+	// Make sure iso buffer is allocated.
+	if (iso._buff == nullptr) {
+		std::cout << "ISO buffer is nullptr.\n";
+		exit(1);
+	}
+	
+	for (int i = 0; i < iso._boot0siz; i++)
+		*(iso._buff+i) = *(iso._boot1buff+i);
+}
 
 auto fat16_write_boot1(ISOinfo& iso)->void {}
 

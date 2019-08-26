@@ -52,9 +52,10 @@ static FAT16_BootSector bootSector;
 
 auto fat16_init(ISOinfo& iso)->void;
 auto fat16_genBoot(ISOinfo& iso)->void;
+auto fat16_format_iso(ISOinfo& iso)->void;
 
 auto fat16_write_boot0(ISOinfo& iso)->void;
-auto fat16_format_iso(ISOinfo& iso)->void;
+
 auto fat16_write_boot1(ISOinfo& iso)->void;
 auto fat16_write_isodir(ISOinfo& iso)->void;
 
