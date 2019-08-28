@@ -1,0 +1,1 @@
+int bootloader_main() {}
