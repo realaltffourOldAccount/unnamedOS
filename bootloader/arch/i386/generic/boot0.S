@@ -1,7 +1,6 @@
-	.code16
-	.globl _start, start;
-_start:
-	jmp .
+loop:
+jmp loop
 
-	.space 510-(.-_start)
-	.word 0xaa55
+times 510-($-$$) db 0
+
+dw 0xaa55

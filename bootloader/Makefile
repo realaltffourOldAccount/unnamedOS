@@ -16,17 +16,24 @@ include $(ARCHDIR)/make.config
 
 ASMFLAGS:=$(ASMFLAGS) $(BOOTLOADER_ARCH_ASMFLAGS)
 
-BOOT0_OBJS= \
-$(BOOT0_ARCH_OBJ) \
+BOOT0_SRC=\
+$(BOOT0_ARCH_SRC)\
+
+BOOT1_SRC=\
+$(BOOT1_ARCH_SRC)\
 
 .PHONY: all clean install install-headers install-bootloader
-.SUFFIXES: .o .c .S
+.SUFFIXES: .o .bin .S .c
 
-boot0.bin: $(BOOT0_OBJS)	
-	$(LD) -o boot0.bin -e init $(BOOT0_OBJS)
+boot0.bin: $(BOOT0_OBJS)
+
+boot1.bin: $(BOOT1_OBJS)
 
 .S.o:
-	$(AS) -o $@ $<
+	$(CC) -MD -c $< -o $@ $(CFLAGS) $(CPPFLAGS)
+
+.c.o:
+	$(CC) -MD -c $< -o $@ -std=gnu11 $(CFLAGS) $(CPPFLAGS)
 
 clean:
 	rm -f boot0.bin boot1.bin
@@ -34,6 +41,5 @@ clean:
 
 install: install-bootloader
 
-install-bootloader: boot0.bin
+install-bootloader: boot0.bin boot1.bin
 
--include $(BOOT1_OBJS:.o=.d)

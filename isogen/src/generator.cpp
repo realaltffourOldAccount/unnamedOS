@@ -3,9 +3,7 @@
 auto generate_iso(ISOinfo& iso)->void {
     // Allocate ISO buffer.
     // Convert from Megabyte to bytes
-	iso._buffSize = iso._buffSize * (1024*1024);
-	
-    iso._buff = byte8_malloc(iso._buffSize);
+    iso._buff = (byte8*)malloc(iso._buffSize*1024*1024);
 
     // Configure the generator system.
     switch (iso._fs) {
@@ -25,7 +23,6 @@ auto generate_iso(ISOinfo& iso)->void {
 
     // Write the ISO to the output directory.
     writeISO(iso);
-	
     // Clean the resources.
     cleanISO(iso);
 }
@@ -65,14 +62,7 @@ auto write_isodir(ISOinfo& iso)->void {
 
 auto writeISO(const ISOinfo& iso)->void {
     // TODO: Implement this.
-	std::ofstream stream("test.iso", std::ios::binary);
-
-	for (int i = 0; i < iso._buffSize; i++) {
-		stream << iso._buff[i];
-	}
 	
-	//	out.flush();
-	stream.close();
 }
 
 auto cleanISO(ISOinfo& iso)->void {

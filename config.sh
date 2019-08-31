@@ -20,7 +20,6 @@ export PATH="$DIR/compiler/$COMPILER/bin/bin:$PATH"
 export CC=$DIR/compilers/$COMPILER/bin/bin/${HOST}-gcc
 export AR=$DIR/compilers/$COMPILER/bin/bin/${HOST}-ar
 export AS=$DIR/compilers/$COMPILER/bin/bin/${HOST}-as
-export LD=$DIR/compilers/$COMPILER/bin/bin/${HOST}-ld
 export ASM=nasm
 
 # Generic Configuration.

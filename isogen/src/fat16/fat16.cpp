@@ -6,8 +6,8 @@ auto fat16_init(ISOinfo& iso)->void {
 	iso._boot0buff = byte8_malloc(512);
     
 	// Open boot0 and boot1 files.
-	std::fstream boot0_stream(iso._boot0_loc, std::ios::in | std::ios::out | std::ios::binary);
-	std::fstream boot1_stream(iso._boot1_loc, std::ios::in | std::ios::out | std::ios::binary);
+	std::fstream boot0_stream(iso._boot0_loc, std::ios::in | std::ios::out | std::ios::binary | std::ios::ate);
+	std::fstream boot1_stream(iso._boot1_loc, std::ios::in | std::ios::out | std::ios::binary | std::ios::ate);
 
 	// Check if file is open.
 	if (!boot0_stream.is_open()) {
@@ -27,18 +27,15 @@ auto fat16_init(ISOinfo& iso)->void {
 	boot1_stream.seekg(0, std::ios::beg);
 
 	// Load boot0 and boot1 into their buffers.
-	char* boot0_tmp = new char[iso._boot0siz+1];
-	char* boot1_tmp = new char[iso._boot1siz+1];
+	char* boot0_tmp = new char[iso._boot0siz];
+	char* boot1_tmp = new char[iso._boot1siz];
  
     boot0_stream.read(boot0_tmp, iso._boot0siz);
 	boot1_stream.read(boot1_tmp, iso._boot1siz);
-	
+
 	byte8_arrset(iso._boot0buff, iso._boot0siz, boot0_tmp);
 	byte8_arrset(iso._boot1buff, iso._boot1siz, boot1_tmp);
-	
-	delete boot0_tmp;
-	delete boot1_tmp;
-    
+
 	// Allocate bootSector members.
 	bootSector.biosParamBlock = new FAT16_BPB();
 	bootSector.extendedBiosParamBlock = new FAT16_EBPB();
@@ -51,15 +48,15 @@ auto fat16_init(ISOinfo& iso)->void {
 
 	// Check biosParamBlock
 	for (int i = 3; i < 36; i++)
-		if (iso._boot0buff[i] != hex2byte8("0x90")) {
-			std::cout << "Invalid biosParamBlock, expected 0x90.\n";
+		if (iso._boot0buff[i] != byte8()) {
+			std::cout << "Invalid biosParamBlock, expected 0x00.\n";
 			exit(1);
 		}
 	
 	// Check extendedBiosParamBlock
 	for (int i = 36; i < 62; i++)
-		if (iso._boot0buff[i] != hex2byte8("0x90")) {
-			std::cout << "Invalid extendedBiosparamblock, expected 0x90.\n";
+		if (iso._boot0buff[i] != byte8()) {
+			std::cout << "Invalid extendedBiosparamblock, expected 0x00.\n";
 			exit(1);
 		}
 	
