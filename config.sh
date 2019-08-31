@@ -2,9 +2,6 @@
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
 
 # Projects lists
-#SYSTEM_HEADER_PROJECTS="bootloader lib/libc kernel"
-#PROJECTS="bootloader lib/libc kernel"
-
 SYSTEM_HEADER_PROJECTS="lib/libc kernel"
 PROJECTS="lib/libc kernel"
 
@@ -20,6 +17,7 @@ export PATH="$DIR/compiler/$COMPILER/bin/bin:$PATH"
 export CC=$DIR/compilers/$COMPILER/bin/bin/${HOST}-gcc
 export AR=$DIR/compilers/$COMPILER/bin/bin/${HOST}-ar
 export AS=$DIR/compilers/$COMPILER/bin/bin/${HOST}-as
+export LD=$DIR/compilers/$COMPILER/bin/bin/${HOST}-ld
 export ASM=nasm
 
 # Generic Configuration.
